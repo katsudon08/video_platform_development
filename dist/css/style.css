@@ -1,0 +1,43 @@
+.characterWrapper {
+    background-color: #333333;
+    text-align: center;
+}
+
+.characterWrapper > h1 {
+    color: #ffffff;
+}
+
+form {
+    text-align: center;
+}
+
+#search_bar {
+    width: 50%;
+}
+
+.propaganda {
+    text-align: center;
+}
+
+.movieWrapper {
+    overflow-x: scroll;
+    width: auto;
+    height: 400px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: inherit;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: inherit;
+}
+
+:hover::-webkit-scrollbar-thumb {
+    background-color: #554f4f;
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>document</title>
+    <link rel="stylesheet" href="./../css/style.css">
+</head>
+<body>
+    <div id="upper_part">
+            <div class="characterWrapper">
+                <h1>
+                    Shares
+                </h1>
+            </div>
+        <div class="searchBar">
+            <!-- submitをしてしまうと、画面が遷移してしまうのでbuttonを使用 -->
+            <form id="search_form">
+                <input type="search" name="search" id="search_bar">
+                <input type="button" value="検索" id="search_send">
+            </form>
+        </div>
+        <div class="propaganda">
+            <h4>
+                let's share videos with your group
+            </h4>
+        </div>
+        <div class="inputFile">
+            <!-- searchの時と同様 -->
+            <form id="file_form">
+                <input type="file" name="videos" accept="video/*" id="file_select" >
+                <input type="button" value="送信" id="file_send">
+            </form>
+        </div>
+    </div>
+
+    <div id="lower_part">
+        <div class="movieWrapper">
+            <video src="./../../upload/BFwnumnD6z6TChdQh6Jjyg6T.mp4"></video>
+        </div>
+    </div>
+
+    <script src="./../js/video-controll.js"></script>
+    <script src="./../js/video-display.js"></script>
+</body>
+</html>
