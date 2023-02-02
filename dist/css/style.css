@@ -19,10 +19,12 @@ form {
     text-align: center;
 }
 
-.movieWrapper {
+#lower_part {
+    margin-top: 50px;
     overflow-x: scroll;
     width: auto;
-    height: 400px;
+    height: auto;
+    display: inline-flex;
 }
 
 ::-webkit-scrollbar {
@@ -40,4 +42,23 @@ form {
 
 :hover::-webkit-scrollbar-thumb {
     background-color: #554f4f;
+}
+
+.videoWrapper {
+    width: 250px;
+    margin-right: 10px;
+}
+
+.video {
+    width: 250px;
+    border: solid;
+    border-color: #333333;
+}
+
+.videoElement {
+    width: 250px;
+    text-align: center;
+    font-family: "arial black";
+    border: solid;
+    border-color: #333333;
 }

@@ -44,5 +44,13 @@
     // 動画の検索
 
     // 動画の表示
-
+    const videoDisplay = (newVideo)=> {
+        // やること
+        // 1.innerHTMLで既存のビデオタグをコピーしてその名前と日付とともに動画を表示
+        // 2.もし何も保存されていない場合は、関数側でvideoWrapperの中身を作成、表示
+        // 3.日付順にソートして動画を表示する
+        
+        const videoList = document.getElementById('lower_part');
+        videoList.append(newVideo);
+    }
 }) ();
