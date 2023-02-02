@@ -3,10 +3,6 @@
     const fileButton = document.getElementById('file_send');
 
     const upRoad = (formData) => {
-        // ---------------------------------------------------------
-        // formdataの中のfileが格納されている場所を探すこと
-        // ---------------------------------------------------------
-
         fetch('http://localhost:3000', {
             method: 'POST',
             body: formData
@@ -46,5 +42,7 @@
     });
 
     // 動画の検索
+
+    // 動画の表示
 
 }) ();

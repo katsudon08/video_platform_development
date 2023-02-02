@@ -45,8 +45,15 @@ app.post('/', (req, res) => {
         throw error;
     }
 
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth()+1;
+    const date = now.getDate();
+    const videoSaveDate = year+'年 '+month+'月 '+date+'日'
+
     console.log(renamedFile.name);
     console.log(renamedFile.path);
+    console.log(videoSaveDate);
     const fileBuffer = Buffer.from(JSON.stringify(renamedFile));
     console.log(fileBuffer);
     // insert(renamedFile.name, renamedFile.path, fileBuffer);
