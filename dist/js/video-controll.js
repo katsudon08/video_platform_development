@@ -15,12 +15,14 @@
             }else {
                 // response.text()を表示した後に、promiseの値が返ってきていたのでundefinedになっていたものと思われる
                 const convertRes = await response.json();
-                console.log(convertRes.name)                                             ;
-                // return convertRes;
+                console.log(convertRes.name);
+                console.log(convertRes.saveDate);
+                console.log(convertRes.videoPath);
+                return convertRes.name;
             }
         }catch(error) {
             console.error(error);
-            // return null;
+            return null;
         }
     };
 
@@ -41,7 +43,10 @@
 
             const formData = new FormData(document.getElementById('file_form'));
             formData.append('newFile', renamedFile);
-            // upload(formData);
+
+            // やること
+            // promiseの戻り値である、promiseResultを文字列に変換する必要がある
+            console.log(upload(formData));
             // console.log(upload(formData));
             // upload(formData) ? console.log(upload(formData)) : console.error('Error: undefined or null this value');
         }
