@@ -14,8 +14,9 @@
                 throw new Error('Internal server error');
             }else {
                 // response.text()を表示した後に、promiseの値が返ってきていたのでundefinedになっていたものと思われる
-                console.log(await response.json());
-                // return await response.json();
+                const convertRes = await response.json();
+                console.log(convertRes.name)                                             ;
+                // return convertRes;
             }
         }catch(error) {
             console.error(error);
@@ -30,17 +31,18 @@
             alert('ファイルを選択してください');
             console.log('false');
         }else {
+            const fileName = inputFile.name;
+            const fileExtention = fileName.substring(fileName.lastIndexOf('.'));
             let newName = prompt('ファイル名を入力してください');
             // 三項演算子の使用を確認した後に、null時の仕様を修正
-            newName ? console.log('ok') : newName = inputFile.name;
-            const fileName = inputFile.name;
-            const fileExtention = fileName.substring(fileName.lastIndexOf("."));
+            newName ? newName += fileExtention : newName = fileName;
             const blob = inputFile.slice(0, inputFile.size, inputFile.type);
-            const renamedFile = new File([blob], newName + fileExtention, {type: inputFile.type});
+            const renamedFile = new File([blob], newName, {type: inputFile.type});
 
             const formData = new FormData(document.getElementById('file_form'));
             formData.append('newFile', renamedFile);
-            upload(formData);
+            // upload(formData);
+            // console.log(upload(formData));
             // upload(formData) ? console.log(upload(formData)) : console.error('Error: undefined or null this value');
         }
     });
