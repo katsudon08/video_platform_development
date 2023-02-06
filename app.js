@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const mysql = require('mysql2');
-const { Buffer } = require('buffer');
 const formData = require('express-form-data');
 const fs = require('fs');
 
@@ -15,7 +14,7 @@ const client = mysql.createConnection({
 });
 
 client.connect((error) => {
-    error ? console.error(`error connecting: ${error.stack}\n`) : console.log(`connected as id ${client.threadId}\n`)
+    error ? console.error(`error connecting: ${error.stack}\n`) : console.log(`connected as id ${client.threadId}\n`);
 });
 
 const port = 3000;
@@ -36,6 +35,8 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
     const deletedFile = req.files.videos;
     const renamedFile = req.files.newFile;
+    const videoName = renamedFile.name;
+    const videoPath = renamedFile.path;
 
     // deletedFileを削除
     try {
@@ -49,16 +50,15 @@ app.post('/', (req, res) => {
     const year = now.getFullYear();
     const month = now.getMonth()+1;
     const date = now.getDate();
-    const videoSaveDate = year+'年 '+month+'月 '+date+'日'
+    const videoSaveDate = year+'年 '+month+'月 '+date+'日';
 
-    console.log(renamedFile.name);
-    console.log(renamedFile.path);
-    console.log(videoSaveDate);
-    const fileBuffer = Buffer.from(JSON.stringify(renamedFile));
-    console.log(fileBuffer);
+    // console.log(renamedFile.name);
+    // console.log(renamedFile.path);
+    // console.log(videoSaveDate);
+
     // insert(renamedFile.name, renamedFile.path, fileBuffer);
 
-    res.sendStatus(200);
+    res.send({name: videoName, saveDate: videoSaveDate, videoPath});
 });
 
 app.listen(port, () => {

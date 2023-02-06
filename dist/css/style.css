@@ -51,14 +51,14 @@ form {
 
 .video {
     width: 250px;
-    border: solid;
-    border-color: #333333;
+    /* border: solid;
+    border-color: #333333; */
 }
 
 .videoElement {
     width: 250px;
     text-align: center;
     font-family: "arial black";
-    border: solid;
-    border-color: #333333;
+    /* border: solid;
+    border-color: #333333; */
 }
