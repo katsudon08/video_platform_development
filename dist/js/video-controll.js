@@ -18,6 +18,8 @@
                 console.log(convertRes.name);
                 console.log(convertRes.saveDate);
                 console.log(convertRes.videoPath);
+
+                // モック関数化してみたが、修正できず
                 return convertRes.name;
             }
         }catch(error) {
@@ -46,8 +48,8 @@
 
             // やること
             // promiseの戻り値である、promiseResultを文字列に変換する必要がある
-            console.log(upload(formData));
-            // console.log(upload(formData));
+            const name = upload(formData);
+            console.log(name);
             // upload(formData) ? console.log(upload(formData)) : console.error('Error: undefined or null this value');
         }
     });
