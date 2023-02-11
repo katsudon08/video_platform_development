@@ -41,7 +41,6 @@ app.post('/', (req, res) => {
     // deletedFileを削除
     try {
         fs.unlinkSync(deletedFile.path);
-        console.log('deletedFileを削除しました\n');
     }catch(error) {
         throw error;
     }
@@ -51,14 +50,11 @@ app.post('/', (req, res) => {
     const month = now.getMonth()+1;
     const date = now.getDate();
     const videoSaveDate = year+'年 '+month+'月 '+date+'日';
-
-    // console.log(renamedFile.name);
-    // console.log(renamedFile.path);
-    // console.log(videoSaveDate);
+    // ファイル名だけ切り取り
+    const pathResult = videoPath.substr(12);
 
     // insert(renamedFile.name, renamedFile.path, fileBuffer);
-
-    res.send({name: videoName, saveDate: videoSaveDate, videoPath});
+    res.send({name: videoName, date: videoSaveDate, path: pathResult});
 });
 
 app.listen(port, () => {

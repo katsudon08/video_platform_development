@@ -14,13 +14,7 @@
                 throw new Error('Internal server error');
             }else {
                 // response.text()を表示した後に、promiseの値が返ってきていたのでundefinedになっていたものと思われる
-                const convertRes = await response.json();
-                console.log(convertRes.name);
-                console.log(convertRes.saveDate);
-                console.log(convertRes.videoPath);
-
-                // モック関数化してみたが、修正できず
-                return convertRes.name;
+                return await response.json();
             }
         }catch(error) {
             console.error(error);
@@ -28,7 +22,7 @@
         }
     };
 
-    fileButton.addEventListener('click', () => {
+    fileButton.addEventListener('click', async () => {
         const inputFile = document.getElementById('file_select').files[0];
 
         if(inputFile === undefined) {
@@ -46,11 +40,14 @@
             const formData = new FormData(document.getElementById('file_form'));
             formData.append('newFile', renamedFile);
 
-            // やること
-            // promiseの戻り値である、promiseResultを文字列に変換する必要がある
-            const name = upload(formData);
-            console.log(name);
-            // upload(formData) ? console.log(upload(formData)) : console.error('Error: undefined or null this value');
+            const responseData = await upload(formData);
+            console.log(responseData.name);
+            console.log(responseData.date);
+            console.log(responseData.path);
+            const setPath = './../upload/'+responseData.path;
+            console.log(setPath);
+
+            videoDisplay(responseData.name, responseData.date, setPath);
         }
     });
 
@@ -63,11 +60,14 @@
         // 3.日付順にソートして動画を表示する
 
         const videoList = document.getElementById('lower_part');
+        console.log(newElement(name, date, path));
         videoList.appendChild(newElement(name, date, path));
     }
 
     // 動画の要素の新規作成
     const newElement = (name, date, src)=>{
+        console.log(name);
+        console.log(date);
         const videoWrapper = document.createElement('div');
         const videoDescription = [document.createElement('div'), document.createElement('div')];
         const video = document.createElement('video');
@@ -86,6 +86,7 @@
         videoDescription[0].textContent = name;
         videoDescription[1].textContent = date;
         for(let i=0; i<2; i++) {
+            console.log(videoDescription[i  ]);
             videoWrapper.appendChild(videoDescription[i]);
         }
 

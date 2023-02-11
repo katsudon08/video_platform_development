@@ -21,9 +21,9 @@ form {
 
 #lower_part {
     margin-top: 50px;
-    overflow-x: scroll;
+    overflow: auto;
+    height: 250px;
     width: auto;
-    height: auto;
     display: inline-flex;
 }
 
@@ -51,14 +51,10 @@ form {
 
 .video {
     width: 250px;
-    /* border: solid;
-    border-color: #333333; */
+
 }
 
 .videoElement {
     width: 250px;
     text-align: center;
-    font-family: "arial black";
-    /* border: solid;
-    border-color: #333333; */
 }
