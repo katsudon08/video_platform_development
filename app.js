@@ -24,6 +24,7 @@ const upDir = 'dist/upload';
 
 // distファイル下の静的ファイルの提供
 app.use(express.static('dist'));
+app.use(express.static('log'));     
 // postで来たFormDataの保存先指定とクリーンをするかの指定
 app.use(formData.parse({uploadDir: upDir, autoClean: false}));
 
