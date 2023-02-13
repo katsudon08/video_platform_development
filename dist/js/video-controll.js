@@ -32,7 +32,7 @@
             const fileName = inputFile.name;
             const fileExtention = fileName.substring(fileName.lastIndexOf('.'));
             let newName = prompt('ファイル名を入力してください');
-            // 三項演算子の使用を確認した後に、null時の仕様を修正
+            // newNameのnull判別
             newName ? newName += fileExtention : newName = fileName;
             const blob = inputFile.slice(0, inputFile.size, inputFile.type);
             const renamedFile = new File([blob], newName, {type: inputFile.type});
@@ -51,16 +51,31 @@
         }
     });
 
+    document.addEventListener('DOMContentLoaded', async () => {
+        const url = './../../log.txt';
+        try {
+            const response = await fetch(url, {method: 'POST'});
+            if(response.status !== 200) {
+                console.log(`response.ok: ${response.ok}`);
+                console.log(`response.status: ${response.status}`);
+                console.log(`response.statusText: ${response.statusText}`);
+                throw new Error('Internal server error');
+            }else {
+                console.log(response.text());
+            }
+        }catch(error) {
+            console.error(error);
+            return null;
+        }
+    });
+
     // 動画の検索
+
+    // テキストファイルから取得
 
     // 動画の表示
     const videoDisplay = (name, date, path)=> {
-        // やること
-        // 2.もし何も保存されていない場合は、関数側でvideoWrapperの中身を作成、表示
-        // 3.日付順にソートして動画を表示する
-
         const videoList = document.getElementById('lower_part');
-        console.log(newElement(name, date, path));
         videoList.appendChild(newElement(name, date, path));
     }
 
@@ -69,7 +84,7 @@
         console.log(name);
         console.log(date);
         const videoWrapper = document.createElement('div');
-        const videoDescription = [document.createElement('div'), document.createElement('div')];
+        const videoDescription = [document.createElement('span'), document.createElement('span')];
         const video = document.createElement('video');
         const source = document.createElement('source');
         videoWrapper.className = 'videoWrapper';

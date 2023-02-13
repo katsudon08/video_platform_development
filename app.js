@@ -39,10 +39,9 @@ app.post('/', (req, res) => {
     const videoPath = renamedFile.path;
 
     // deletedFileを削除
-    try {
-        fs.unlinkSync(deletedFile.path);
-    }catch(error) {
-        throw error;
+    if(checkFile(deletedFile.path)) {
+        const deletedResult = deleteFile(deletedFile.path);
+        console.log(`fileDelete processing is ${deletedResult}`);
     }
 
     const now = new Date();
@@ -52,25 +51,67 @@ app.post('/', (req, res) => {
     const videoSaveDate = year+'年 '+month+'月 '+date+'日';
     // ファイル名だけ切り取り
     const pathResult = videoPath.substr(12);
+    const dataStream = videoName+','+videoSaveDate+','+pathResult;
+    console.log(dataStream);
 
-    // insert(renamedFile.name, renamedFile.path, fileBuffer);
-    res.send({name: videoName, date: videoSaveDate, path: pathResult});
+    const logPath = 'log.txt';
+    if(checkFile(logPath)) {
+        const appendResult = addFile(logPath, dataStream);
+        console.log(`stream append processing is ${appendResult}`);
+    }else {
+        const writeResult = newWriteFile(logPath, dataStream);
+        console.log(`file make processing is ${writeResult}`);
+    }
+    // res.send({name: videoName, date: videoSaveDate, path: pathResult});
+    res.end();
 });
 
 app.listen(port, () => {
-    console.log(`start on http://localhost:${port}`);
+    console.log(`http://localhost:${port}`);
 });
 
-const insert = (name, path, file) => {
-    client.query('INSERT INTO videos', {name: name, path: path, file: file}, (error, res) => {
-        if(error) throw error;
-        console.log(res);
-    });
+const checkFile = (filePath) => {
+    let isExist = false;
+    try {
+        fs.statSync(filePath);
+        isExist = true;
+    }catch(error) {
+        isExist = false;
+        console.error(error);
+    }
+    return isExist;
 }
 
-const query = () => {
-    client.query('SELECT * FROM videos', (error, res) => {
-        if(error) throw error;
-        console.log(res);
-    })
+const newWriteFile = (filePath, stream) => {
+    try {
+        fs.writeFile(filePath, stream.concat('\n'), (error) => {
+            if(error) {
+                throw error;
+            }
+        });
+        return true;
+    }catch(error) {
+        console.error(error);
+        return false;
+    }
+}
+
+const addFile = (filePath, stream) => {
+    try {
+        fs.appendFileSync(filePath, stream.concat('\n'));
+        return true;
+    }catch(error) {
+        console.error(error);
+        return false;
+    }
+}
+
+const deleteFile = (filePath) => {
+    try {
+        fs.unlinkSync(filePath);
+        return true;
+    }catch(error) {
+        console.error(error);
+        return false;
+    }
 }
