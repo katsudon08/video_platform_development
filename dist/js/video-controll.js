@@ -22,6 +22,24 @@
         }
     };
 
+    document.addEventListener('DOMContentLoaded', async () => {
+        const url = './../../log/log.txt';
+        try {
+            const response = await fetch(url);
+            if(response.status !== 200) {
+                console.log(`response.ok: ${response.ok}`);
+                console.log(`response.status: ${response.status}`);
+                console.log(`response.statusText: ${response.statusText}`);
+                throw new Error('Internal server error');
+            }else {
+                console.log(await response.text());
+            }
+        }catch(error) {
+            console.error(error);
+            return null;
+        }
+    });
+
     fileButton.addEventListener('click', async () => {
         const inputFile = document.getElementById('file_select').files[0];
 
@@ -48,24 +66,6 @@
             console.log(setPath);
 
             videoDisplay(responseData.name, responseData.date, setPath);
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', async () => {
-        const url = './../../log';
-        try {
-            const response = await fetch(url);
-            if(response.status !== 200) {
-                console.log(`response.ok: ${response.ok}`);
-                console.log(`response.status: ${response.status}`);
-                console.log(`response.statusText: ${response.statusText}`);
-                throw new Error('Internal server error');
-            }else {
-                console.log(await response.text());
-            }
-        }catch(error) {
-            console.error(error);
-            return null;
         }
     });
 
