@@ -1,30 +1,16 @@
 const express = require('express');
 const app = express();
-const mysql = require('mysql2');
 const formData = require('express-form-data');
 const fs = require('fs');
-
-// sql
-const client = mysql.createConnection({
-    host: 'localhost',
-    port: '3306',
-    user: 'akihiko',
-    password: 'akihiko171101',
-    database: 'shares'
-});
-
-client.connect((error) => {
-    error ? console.error(`error connecting: ${error.stack}\n`) : console.log(`connected as id ${client.threadId}\n`);
-});
+const readline = require('readline');
 
 const port = 3000;
-
 const htmlPath = __dirname + '/dist/html/home.html';
 const upDir = 'dist/upload';
+const logPath = 'log/log.txt';
 
 // distファイル下の静的ファイルの提供
 app.use(express.static('dist'));
-app.use(express.static('log'));     
 // postで来たFormDataの保存先指定とクリーンをするかの指定
 app.use(formData.parse({uploadDir: upDir, autoClean: false}));
 
@@ -32,6 +18,15 @@ app.get('/', (req, res) => {
     // htmlファイルの表示
     res.sendFile(htmlPath);
 });
+
+// logを取得したい
+app.get('/log', (req, res) => {
+    if(checkFile(url)) {
+        const readResult = readFile(url);
+        res.end();
+    }
+});
+
 
 app.post('/', (req, res) => {
     const deletedFile = req.files.videos;
@@ -55,7 +50,6 @@ app.post('/', (req, res) => {
     const dataStream = videoName+','+videoSaveDate+','+pathResult;
     console.log(dataStream);
 
-    const logPath = 'log.txt';
     if(checkFile(logPath)) {
         const appendResult = addFile(logPath, dataStream);
         console.log(`stream append processing is ${appendResult}`);
@@ -65,6 +59,11 @@ app.post('/', (req, res) => {
     }
     // res.send({name: videoName, date: videoSaveDate, path: pathResult});
     res.end();
+});
+
+// status404 not found
+app.use((req, res, next) => {
+    res.status(404).send('<h1>404 page is not founded</h1>');
 });
 
 app.listen(port, () => {
@@ -100,6 +99,32 @@ const newWriteFile = (filePath, stream) => {
 const addFile = (filePath, stream) => {
     try {
         fs.appendFileSync(filePath, stream.concat('\n'));
+        return true;
+    }catch(error) {
+        console.error(error);
+        return false;
+    }
+}
+
+const readFile = (filePath) => {
+    try {
+        const stream = fs.createReadStream(filePath, {
+            // 文字コード
+            encoding: 'utf-8',
+            // 一度に取得するバイト数
+            highWaterMark: 1024
+        });
+
+        // readlineにstreamを渡す
+        const reader = readline.createInterface({input: stream});
+        let textArray = [];
+        let i = 0;
+        reader.on('line', (text) => {
+            textArray.push(text);
+            console.log(textArray[i]);
+            i++;
+        });
+
         return true;
     }catch(error) {
         console.error(error);
