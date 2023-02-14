@@ -1,6 +1,9 @@
 (() => {
     // 動画のアップロード
     const fileButton = document.getElementById('file_send');
+    const searchButton = document.getElementById('search_send');
+    const searchBar = document.getElementById('search_bar');
+    const videoList = document.getElementById('lower_part');
 
     const upload = async (formData) => {
         const url = 'http://localhost:3000';
@@ -23,23 +26,9 @@
     };
 
     document.addEventListener('DOMContentLoaded', async () => {
-        const url = 'http://localhost:3000/log/log.txt';
-        try {
-            const response = await fetch(url);
-            if(response.status !== 200) {
-                console.log(`response.ok: ${response.ok}`);
-                console.log(`response.status: ${response.status}`);
-                console.log(`response.statusText: ${response.statusText}`);
-                throw new Error('Internal server error');
-            }else {
-                const jsonArray = await response.json();
-                for(const element of jsonArray) {
-                    videoDisplay(element.name, element.date, element.path);
-                }
-            }
-        }catch(error) {
-            console.error(error);
-            return null;
+        const jsonArray = await getVideoData();
+        for(const element of jsonArray) {
+            videoDisplay(element.name, element.date, element.path);
         }
     });
 
@@ -71,13 +60,48 @@
     });
 
     // 動画の検索
+    searchButton.addEventListener('click', async () => {
+        const searchWard = searchBar.value;
+        const jsonArray = await getVideoData();
+        const resultArray = new Array();
+        for(const video of jsonArray) {
+            if(video.name.indexOf(searchWard) === -1) {
+                alert(`${searchWard}に一致する動画は見つかりませんでした。`);
+                return;
+            }else {
+                resultArray.push(video);
+            }
+        }
+        while(videoList.firstChild) {
+            videoList.removeChild(videoList.firstChild);
+        }
+        for(let i=0; i<resultArray.length; i++) {
+            videoDisplay(resultArray[i].name, resultArray[i].date, resultArray[i].path);
+        }
+    });
 
     // テキストファイルから取得
+    const getVideoData = async () => {
+        const url = 'http://localhost:3000/log/log.txt';
+        try {
+            const response = await fetch(url);
+            if(response.status !== 200) {
+                console.log(`response.ok: ${response.ok}`);
+                console.log(`response.status: ${response.status}`);
+                console.log(`response.statusText: ${response.statusText}`);
+                throw new Error('Internal server error');
+            }else {
+                return await response.json();
+            }
+        }catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
 
     // 動画の表示
     const videoDisplay = (name, date, path)=> {
         const setPath = './../upload/'+path;
-        const videoList = document.getElementById('lower_part');
         videoList.appendChild(newElement(name, date, setPath));
     }
 
