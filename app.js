@@ -21,34 +21,25 @@ app.get('/', (req, res) => {
     res.sendFile(htmlPath);
 });
 
-app.get('/log/log.txt', (req, res) => {
-    console.log('hoge');
-    const readResult = readFile(logPath);
-    let responseData = [];
-    let lineArray = [];
+app.get('/log/log.txt', async (req, res) => {
+    const readResult = await readFile(logPath);
+    let responseData = new Array();
     let responseJson = {
         "name": "",
         "date": "",
         "path": ""
     };
     if (readResult === false) {
-        console.log('hoge');
         res.send(`file read is ${readResult}`);
     }else {
-        console.log('hoge');
-        // for(let i=0; i<readResult.length; i++) {
-        //     console.log(readResult[i]);
-        //     lineArray = readResult[i].split(',');
-        //     responseJson.name = lineArray[0];
-        //     responseJson.date = lineArray[1];
-        //     responseJson.path = lineArray[2];
-        //     responseData.push(responseJson);
-        //     console.log(responseData[i]);
-        // }
-        // for(let i=0; i<readResult.length; i++) {
-        //     console.log(readResult[i]);
-        // }
-        res.send('hoge');
+        for(const lineArray of readResult) {
+            responseJson.name = lineArray.split(',')[0];
+            responseJson.date = lineArray.split(',')[1];
+            responseJson.path = lineArray.split(',')[2];
+            responseData.push(responseJson);
+        }
+        console.log(responseData);
+        res.send(responseData);
     }
 });
 
@@ -82,8 +73,7 @@ app.post('/', (req, res) => {
         const writeResult = newWriteFile(logPath, dataStream);
         console.log(`file make processing is ${writeResult}`);
     }
-    // res.send({name: videoName, date: videoSaveDate, path: pathResult});
-    res.end();
+    res.send({name: videoName, date: videoSaveDate, path: pathResult});
 });
 
 // status404 not found
@@ -141,15 +131,17 @@ const readFile = async (filePath) => {
         });
 
         // readlineにstreamを渡す
-        const reader = readline.createInterface({input: stream});
-        let textArray = new Array();
-        reader.on('line', (text) => {
-            textArray.push(text);
+        const reader = readline.createInterface({
+            input: stream,
+            crlfDelay: Infinity
         });
-
+        let textArray = new Array();
+        for await (const line of reader) {
+            textArray.push(line);
+        }
         console.log(textArray);
 
-        return true;
+        return textArray;
     }catch(error) {
         console.error(error);
         return false;

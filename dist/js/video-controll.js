@@ -32,7 +32,10 @@
                 console.log(`response.statusText: ${response.statusText}`);
                 throw new Error('Internal server error');
             }else {
-                console.log(await response.text());
+                const jsonArray = await response.json();
+                for(const element of jsonArray) {
+                    videoDisplay(element.name, element.date, element.path);
+                }
             }
         }catch(error) {
             console.error(error);
@@ -62,10 +65,8 @@
             console.log(responseData.name);
             console.log(responseData.date);
             console.log(responseData.path);
-            const setPath = './../upload/'+responseData.path;
-            console.log(setPath);
 
-            videoDisplay(responseData.name, responseData.date, setPath);
+            videoDisplay(responseData.name, responseData.date, responseData.path);
         }
     });
 
@@ -75,8 +76,9 @@
 
     // 動画の表示
     const videoDisplay = (name, date, path)=> {
+        const setPath = './../upload/'+path;
         const videoList = document.getElementById('lower_part');
-        videoList.appendChild(newElement(name, date, path));
+        videoList.appendChild(newElement(name, date, setPath));
     }
 
     // 動画の要素の新規作成
