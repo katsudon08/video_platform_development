@@ -72,6 +72,7 @@
                 resultArray.push(video);
             }
         }
+        // videoListの子要素をすべて削除
         while(videoList.firstChild) {
             videoList.removeChild(videoList.firstChild);
         }
