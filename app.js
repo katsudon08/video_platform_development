@@ -1,3 +1,4 @@
+const { response } = require('express');
 const express = require('express');
 const app = express();
 const formData = require('express-form-data');
@@ -11,6 +12,7 @@ const logPath = 'log/log.txt';
 
 // distファイル下の静的ファイルの提供
 app.use(express.static('dist'));
+app.use(express.static(logPath));
 // postで来たFormDataの保存先指定とクリーンをするかの指定
 app.use(formData.parse({uploadDir: upDir, autoClean: false}));
 
@@ -19,11 +21,34 @@ app.get('/', (req, res) => {
     res.sendFile(htmlPath);
 });
 
-// logを取得したい
-app.get('/log', (req, res) => {
-    if(checkFile(url)) {
-        const readResult = readFile(url);
-        res.end();
+app.get('/log/log.txt', (req, res) => {
+    console.log('hoge');
+    const readResult = readFile(logPath);
+    let responseData = [];
+    let lineArray = [];
+    let responseJson = {
+        "name": "",
+        "date": "",
+        "path": ""
+    };
+    if (readResult === false) {
+        console.log('hoge');
+        res.send(`file read is ${readResult}`);
+    }else {
+        console.log('hoge');
+        // for(let i=0; i<readResult.length; i++) {
+        //     console.log(readResult[i]);
+        //     lineArray = readResult[i].split(',');
+        //     responseJson.name = lineArray[0];
+        //     responseJson.date = lineArray[1];
+        //     responseJson.path = lineArray[2];
+        //     responseData.push(responseJson);
+        //     console.log(responseData[i]);
+        // }
+        // for(let i=0; i<readResult.length; i++) {
+        //     console.log(readResult[i]);
+        // }
+        res.send('hoge');
     }
 });
 
@@ -106,7 +131,7 @@ const addFile = (filePath, stream) => {
     }
 }
 
-const readFile = (filePath) => {
+const readFile = async (filePath) => {
     try {
         const stream = fs.createReadStream(filePath, {
             // 文字コード
@@ -117,13 +142,12 @@ const readFile = (filePath) => {
 
         // readlineにstreamを渡す
         const reader = readline.createInterface({input: stream});
-        let textArray = [];
-        let i = 0;
+        let textArray = new Array();
         reader.on('line', (text) => {
             textArray.push(text);
-            console.log(textArray[i]);
-            i++;
         });
+
+        console.log(textArray);
 
         return true;
     }catch(error) {

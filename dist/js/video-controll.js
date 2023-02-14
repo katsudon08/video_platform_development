@@ -23,7 +23,7 @@
     };
 
     document.addEventListener('DOMContentLoaded', async () => {
-        const url = './../../log/log.txt';
+        const url = 'http://localhost:3000/log/log.txt';
         try {
             const response = await fetch(url);
             if(response.status !== 200) {
