@@ -1,9 +1,12 @@
-const { response } = require('express');
 const express = require('express');
 const app = express();
 const formData = require('express-form-data');
 const fs = require('fs');
 const readline = require('readline');
+const basicAuth = require('express-basic-auth');
+
+const correctUserName = 'admin';
+const correctPassword = 'password';
 
 const port = 3000;
 const htmlPath = __dirname + '/dist/html/home.html';
@@ -15,6 +18,20 @@ app.use(express.static('dist'));
 app.use(express.static(logPath));
 // postで来たFormDataの保存先指定とクリーンをするかの指定
 app.use(formData.parse({uploadDir: upDir, autoClean: false}));
+
+app.use(
+    basicAuth({
+        challenge: true,
+        unauthorizedResponse: () => {
+            return 'unauthorized'
+        },
+        authorizer: (userName, password) => {
+            const userMatch = basicAuth.safeCompare(userName, correctUserName);
+            const passMatch = basicAuth.safeCompare(password, correctPassword);
+            return userMatch & passMatch;
+        }
+    })
+);
 
 app.get('/', (req, res) => {
     // htmlファイルの表示
