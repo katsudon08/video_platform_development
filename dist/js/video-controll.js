@@ -5,8 +5,10 @@
     const searchBar = document.getElementById('search_bar');
     const videoList = document.getElementById('lower_part');
 
+    const url = 'https://withvideo/.onrender.com';
+    const localUrl = 'http://localhost:3000';
+
     const upload = async (formData) => {
-        const url = 'https://withvideo/.onrender.com/';
         //戻り値に  promiseを返すようにするため、awaitで一時停止する必要がある
         try {
             const response = await fetch(url, {method: 'POST', body: formData});
@@ -26,9 +28,11 @@
     };
 
     document.addEventListener('DOMContentLoaded', async () => {
-        const jsonArray = await getVideoData();
-        for(const element of jsonArray) {
-            videoDisplay(element.name, element.date, element.path);
+        const jsonArray = await getVideoData(url);
+        if(jsonArray !== null) {
+            for(const element of jsonArray) {
+                videoDisplay(element.name, element.date, element.path);
+            }
         }
     });
 
@@ -84,10 +88,10 @@
     });
 
     // テキストファイルから取得
-    const getVideoData = async () => {
-        const url = 'https://withvideo.onrender.com/log/log.txt';
+    const getVideoData = async (url) => {
+        const logUrl = url+'/log/log.txt';
         try {
-            const response = await fetch(url);
+            const response = await fetch(logUrl);
             if(response.status !== 200) {
                 console.log(`response.ok: ${response.ok}`);
                 console.log(`response.status: ${response.status}`);
