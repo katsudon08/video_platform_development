@@ -4,6 +4,8 @@ const app = express();
 const formData = require('express-form-data');
 const fs = require('fs');
 const readline = require('readline');
+const passport = require('passport');
+const passportHTTP = require('passport-http');
 
 const port = 3000;
 const htmlPath = __dirname + '/dist/html/home.html';
@@ -16,10 +18,28 @@ app.use(express.static(logPath));
 // postで来たFormDataの保存先指定とクリーンをするかの指定
 app.use(formData.parse({uploadDir: upDir, autoClean: false}));
 
-app.get('/', (req, res) => {
-    // htmlファイルの表示
-    res.sendFile(htmlPath);
-});
+const userMatch = 'admin';
+const passMatch = '123';
+
+passport.use(new passportHTTP.BasicStrategy(
+    (username, password, done) => {
+        if(username === userMatch && password === passMatch) {
+            return done(null, true);
+        }else {
+            return done(null, false);
+        }
+    }
+));
+
+app.get('/',
+    passport.authenticate('basic', {
+        session: false,
+    }),
+    (req, res) => {
+        // htmlファイルの表示
+        res.sendFile(htmlPath);
+    }
+);
 
 app.get('/log/log.txt', async (req, res) => {
     const readResult = await readFile(logPath);
