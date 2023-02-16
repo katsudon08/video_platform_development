@@ -6,7 +6,7 @@
     const videoList = document.getElementById('lower_part');
 
     const upload = async (formData) => {
-        const url = 'http://localhost:3000';
+        const url = 'https://withvideo/.onrender.com';
         //戻り値に  promiseを返すようにするため、awaitで一時停止する必要がある
         try {
             const response = await fetch(url, {method: 'POST', body: formData});
@@ -63,27 +63,29 @@
     searchButton.addEventListener('click', async () => {
         const searchWard = searchBar.value;
         const jsonArray = await getVideoData();
-        const resultArray = new Array();
-        for(const video of jsonArray) {
-            if(video.name.indexOf(searchWard) === -1) {
-                alert(`${searchWard}に一致する動画は見つかりませんでした。`);
-                return;
-            }else {
-                resultArray.push(video);
+        if(jsonArray !== null) {
+            const resultArray = new Array();
+            for(const video of jsonArray) {
+                if(video.name.indexOf(searchWard) === -1) {
+                    alert(`${searchWard}に一致する動画は見つかりませんでした。`);
+                    return;
+                }else {
+                    resultArray.push(video);
+                }
             }
-        }
-        // videoListの子要素をすべて削除
-        while(videoList.firstChild) {
-            videoList.removeChild(videoList.firstChild);
-        }
-        for(let i=0; i<resultArray.length; i++) {
-            videoDisplay(resultArray[i].name, resultArray[i].date, resultArray[i].path);
+            // videoListの子要素をすべて削除
+            while(videoList.firstChild) {
+                videoList.removeChild(videoList.firstChild);
+            }
+            for(let i=0; i<resultArray.length; i++) {
+                videoDisplay(resultArray[i].name, resultArray[i].date, resultArray[i].path);
+            }
         }
     });
 
     // テキストファイルから取得
     const getVideoData = async () => {
-        const url = 'http://localhost:3000/log/log.txt';
+        const url = 'https://withvideo.onrender.com/log/log.txt';
         try {
             const response = await fetch(url);
             if(response.status !== 200) {
