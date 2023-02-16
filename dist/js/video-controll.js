@@ -5,7 +5,7 @@
     const searchBar = document.getElementById('search_bar');
     const videoList = document.getElementById('lower_part');
 
-    const url = 'https://withvideo/.onrender.com';
+    const url = 'https://withvideo.onrender.com';
     const localUrl = 'http://localhost:3000';
 
     const upload = async (formData) => {
