@@ -6,7 +6,7 @@
     const videoList = document.getElementById('lower_part');
 
     const upload = async (formData) => {
-        const url = 'https://withvideo/.onrender.com';
+        const url = 'https://withvideo/.onrender.com/';
         //戻り値に  promiseを返すようにするため、awaitで一時停止する必要がある
         try {
             const response = await fetch(url, {method: 'POST', body: formData});
