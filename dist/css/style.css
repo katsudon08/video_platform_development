@@ -22,7 +22,7 @@ form {
 #lower_part {
     margin-top: 50px;
     overflow: auto;
-    height: 250px;
+    height: auto;
     width: auto;
     display: inline-flex;
 }
@@ -45,6 +45,7 @@ form {
 }
 
 .videoWrapper {
+    height: auto;
     width: 250px;
     margin-right: 10px;
 }
@@ -55,6 +56,7 @@ form {
 }
 
 .videoElement {
+    height: auto;
     width: 250px;
     text-align: center;
 }

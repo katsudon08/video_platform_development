@@ -6,7 +6,7 @@
     const videoList = document.getElementById('lower_part');
 
     const url = 'https://withvideo.onrender.com';
-    const localUrl = 'http://localhost:3000';
+    // const url = 'http://localhost:3000';
 
     const upload = async (formData) => {
         //戻り値に  promiseを返すようにするため、awaitで一時停止する必要がある
@@ -29,8 +29,11 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
         const jsonArray = await getVideoData(url);
+        for(let i=0; i< jsonArray.length; i++) {
+            console.log(jsonArray[i]);
+        }
         if(jsonArray !== null) {
-            for(const element of jsonArray) {
+            for await (const element of jsonArray) {
                 videoDisplay(element.name, element.date, element.path);
             }
         }
@@ -117,7 +120,7 @@
         console.log(name);
         console.log(date);
         const videoWrapper = document.createElement('div');
-        const videoDescription = [document.createElement('span'), document.createElement('span')];
+        const videoDescription = [document.createElement('div'), document.createElement('div')];
         const video = document.createElement('video');
         const source = document.createElement('source');
         videoWrapper.className = 'videoWrapper';

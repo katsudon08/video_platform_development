@@ -51,12 +51,15 @@ app.get('/log/log.txt', async (req, res) => {
     };
     if (readResult === false) {
         res.send(`file read is ${readResult}`);
+        // うまく値を返せない
     }else {
-        for(const lineArray of readResult) {
+        // pushは参照渡しになるので、参照を切ったオブジェクトを作る必要がある
+        for await (const lineArray of readResult) {
             responseJson.name = lineArray.split(',')[0];
             responseJson.date = lineArray.split(',')[1];
             responseJson.path = lineArray.split(',')[2];
-            responseData.push(responseJson);
+            console.log(responseJson);
+            responseData.push(Object.assign({}, responseJson));
         }
         console.log(responseData);
         res.send(responseData);
@@ -159,7 +162,7 @@ const readFile = async (filePath) => {
         for await (const line of reader) {
             textArray.push(line);
         }
-        console.log(textArray);
+        // console.log(`getVideoData: ${textArray}`);
 
         return textArray;
     }catch(error) {
