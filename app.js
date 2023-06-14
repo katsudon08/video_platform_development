@@ -18,18 +18,18 @@ app.use(express.static(logPath));
 // postで来たFormDataの保存先指定とクリーンをするかの指定
 app.use(formData.parse({uploadDir: upDir, autoClean: false}));
 
-const userMatch = 'admin';
-const passMatch = '123';
+// const userMatch = 'admin';
+// const passMatch = '123';
 
-passport.use(new passportHTTP.BasicStrategy(
-    (username, password, done) => {
-        if(username === userMatch && password === passMatch) {
-            return done(null, true);
-        }else {
-            return done(null, false);
-        }
-    }
-));
+// passport.use(new passportHTTP.BasicStrategy(
+//     (username, password, done) => {
+//         if(username === userMatch && password === passMatch) {
+//             return done(null, true);
+//         }else {
+//             return done(null, false);
+//         }
+//     }
+// ));
 
 app.get('/',
     passport.authenticate('basic', {
