@@ -32,9 +32,9 @@ app.use(formData.parse({uploadDir: upDir, autoClean: false}));
 // ));
 
 app.get('/',
-    passport.authenticate('basic', {
-        session: false,
-    }),
+    // passport.authenticate('basic', {
+    //     session: false,
+    // }),
     (req, res) => {
         // htmlファイルの表示
         res.sendFile(htmlPath);
